@@ -63,6 +63,7 @@
                 (if match?
                   (assoc acc k v)
                   acc)))
+            {}
             deps)))
 
 (def cli-options
