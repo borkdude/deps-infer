@@ -40,7 +40,8 @@ version-clj/version-clj {:mvn/version "2.0.1"}
 
 - `--repo`: The location of the mvn repo
 - `--analyze`: The file, directory or directories of sources to analyze. You can
-combine multiple directories using the OS-specific path separator: `src:test`
+combine multiple files and directories using the OS-specific path separator:
+`src:test`
 
 ## Possible improvements
 
