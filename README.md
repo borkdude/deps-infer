@@ -10,6 +10,8 @@ Proof of concept, subject to change. Improvements welcome!
 
 This tool can be used for e.g.:
 
+- Making implicit deps explicit
+- Checking which deps you are _not_ using by comparing the output with your existing `deps.edn`
 - Porting a `lein` `project.clj` or `boot` `build.boot` to `deps.edn`
 - Porting scripts (e.g. [babashka](https://github.com/babashka/babashka)
 scripts) to a `deps.edn` project.
