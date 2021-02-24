@@ -8,15 +8,15 @@ Proof of concept, subject to change. Improvements welcome!
 
 ## Use cases
 
-This tool can be used for e.g.:
+This tool can be used to:
 
-- Making implicit deps explicit
-- Checking which deps you are _not_ using by comparing the output with your existing `deps.edn`
-- Porting a `lein` `project.clj` or `boot` `build.boot` to `deps.edn`
-- Porting scripts (e.g. [babashka](https://github.com/babashka/babashka)
+- Make implicit deps explicit
+- Check which deps you are _not_ using by comparing the output with your existing `deps.edn`
+- Port a `lein` `project.clj` or `boot` `build.boot` to `deps.edn`
+- Port scripts (e.g. [babashka](https://github.com/babashka/babashka)
 scripts) to a `deps.edn` project.
-- Migrating from git deps to mvn deps
-- Checking if there is a newer version available
+- Migrate from git deps to mvn deps
+- Check if there is a newer version available
 
 ## Run
 
