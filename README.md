@@ -42,7 +42,7 @@ version-clj/version-clj {:mvn/version "2.0.1"}
 - `--sources`: The directory or directories of sources to analyze. You can
 combine multiple directories using the OS-specific path separator: `src:test`
 
-## Areas of improvement
+## Possible improvements
 
 PRs welcome.
 
