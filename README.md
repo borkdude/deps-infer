@@ -4,7 +4,7 @@ Infer mvn deps from sources.
 
 ## Status
 
-Proof of concept, subject to change.
+Proof of concept, subject to change. Improvements welcome!
 
 ## Run
 
