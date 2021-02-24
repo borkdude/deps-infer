@@ -42,6 +42,19 @@ org.clojure/tools.cli {:mvn/version "1.0.194"}
 version-clj/version-clj {:mvn/version "2.0.1"}
 ```
 
+Namespaces that cannot be resolved will cause a warning to be printed:
+
+``` clojure
+$ cat corpus/non_existing.clj
+(ns non-existing
+  (:require [foo.bar :as x]))
+```
+
+```
+$ clojure -M -m deps-infer.main --analyze corpus/non_existing.clj
+WARNING: no dep found for foo.bar
+```
+
 ## CLI options
 
 - `--repo`: The location of the mvn repo
@@ -59,7 +72,6 @@ some of the namespace we use in this project.
 - [ ] Download an index of all of Clojars for inferencing of deps that are not
       in your local `.m2/repository`. This index must be kept up to date,
       e.g. daily, and be committed to some git repo where we can then fetch it.
-- [ ] Add warnings for unresolved namespaces
 
 ## Troubleshooting
 

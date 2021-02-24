@@ -65,9 +65,14 @@
       (let [index (edn/read-string (slurp index-file))
             analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
                                                  :config {:output {:analysis true}}}))
-            used-namespaces (map :to (:namespace-usages analysis))
-            deps-maps (vals (select-keys index used-namespaces))
-            deps-map (apply merge deps-maps)
+            used-namespaces (distinct (map :to (:namespace-usages analysis)))
+            deps-map (reduce (fn [acc n]
+                                (if-let [deps-map (get index n)]
+                                  (merge acc deps-map)
+                                  (do
+                                    (binding [*out* *err*]
+                                      (println "WARNING: no dep found for" n))
+                                    acc))) {} used-namespaces)
             results (reduce (fn [acc [k v]]
                               (assoc acc k {:mvn/version (newest (:mvn/versions v))}))
                             (sorted-map)
