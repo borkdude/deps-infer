@@ -10,6 +10,9 @@
 
 (def suffix-re #"\.clj$|\.cljs$|\.cljc$") ;; Not including __init\.class$ as this gives false positives!
 
+(defn lang [filename]
+  (keyword (last (str/split filename #"\."))))
+
 (defn index-jar [index jar]
   (let [jar (str jar)
         jar-file (fs/file jar)]
@@ -17,9 +20,9 @@
       (with-open [jar-resource (java.util.jar.JarFile. jar-file)]
         (let [entries (enumeration-seq (.entries jar-resource))]
           (reduce (fn [acc e]
-                    (let [n (.getName e)]
-                      (if (re-find suffix-re n)
-                        (let [n (str/replace n suffix-re "")
+                    (let [raw-name (.getName e)]
+                      (if (re-find suffix-re raw-name)
+                        (let [n (str/replace raw-name suffix-re "")
                               n (str/replace n "_" "-")
                               n (str/replace n "/" ".")
                               n (symbol n)
@@ -28,7 +31,10 @@
                           (update acc n
                                   (fn [deps]
                                     (update deps (symbol (str/replace group-id "/" ".") artifact)
-                                            update :mvn/versions (fnil conj []) version))))
+                                            (fn [dep-info]
+                                              (-> dep-info
+                                                  (update :mvn/versions (fnil conj []) version)
+                                                  (update :langs (fnil conj #{}) (lang raw-name))))))))
                         acc)))
                   index
                   entries)))
@@ -38,6 +44,18 @@
   (reduce (fn [acc v]
             (if (v/newer? v acc) v acc))
           versions))
+
+(defn select-deps [source-lang deps]
+  (case source-lang
+    (:cljs :cljc) deps
+    (reduce (fn [acc [k v]]
+              (let [langs (:langs v)
+                    match? (or (contains? langs :clj)
+                               (contains? langs :cljc))]
+                (if match?
+                  (assoc acc k v)
+                  acc)))
+            deps)))
 
 (def cli-options
   ;; An option with a required argument
@@ -65,14 +83,15 @@
       (let [index (edn/read-string (slurp index-file))
             analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
                                                  :config {:output {:analysis true}}}))
-            used-namespaces (distinct (map :to (:namespace-usages analysis)))
-            deps-map (reduce (fn [acc n]
-                                (if-let [deps-map (get index n)]
-                                  (merge acc deps-map)
-                                  (do
-                                    (binding [*out* *err*]
-                                      (println "WARNING: no dep found for" n))
-                                    acc))) {} used-namespaces)
+            used-namespaces (distinct (map (juxt :to (comp lang :filename)) (:namespace-usages analysis)))
+            deps-map (reduce (fn [acc [n lang]]
+                               (if-let [deps-map (get index n)]
+                                 (let [deps-map (select-deps lang deps-map)]
+                                   (merge acc deps-map))
+                                 (do
+                                   (binding [*out* *err*]
+                                     (println "WARNING: no dep found for" n))
+                                   acc))) {} used-namespaces)
             results (reduce (fn [acc [k v]]
                               (assoc acc k {:mvn/version (newest (:mvn/versions v))}))
                             (sorted-map)
