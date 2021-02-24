@@ -13,7 +13,7 @@ $ clojure -M deps-infer.main
 ```
 
 This will index your `.m2/repository` and will analyze your sources under `src`
-and `test`. The source path is configurable using the `--sources` argument.
+and `test`.
 
 After that it will suggest a list of dependencies that you can add to your
 `deps.edn`. For this project it will print:
@@ -26,6 +26,12 @@ org.clojure/clojurescript {:mvn/version "1.10.773"}
 org.clojure/tools.cli {:mvn/version "1.0.194"}
 version-clj/version-clj {:mvn/version "2.0.1"}
 ```
+
+## CLI options
+
+- `--repo`: The location of the mvn repo
+- `--sources`: The directory or directories of sources to analyze. You can
+combine multiple directories using the OS-specific path separator: `src:test`
 
 ## Troubleshooting
 
