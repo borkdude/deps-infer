@@ -46,6 +46,7 @@ combine multiple directories using the OS-specific path separator: `src:test`
 
 PRs welcome.
 
+- [ ] Do not suggest `SNAPSHOT` versions
 - [ ] The ClojureScript dependency is a false positive because it matched on some of
 the namespace we use in this project.
 - [ ] Download an index of all of Clojars for inferencing of deps that are not in your local `.m2/repository`.
