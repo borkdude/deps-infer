@@ -16,7 +16,10 @@ This will index your `.m2/repository` and will analyze your sources under `src`
 and `test`.
 
 After that it will suggest a list of dependencies that you can add to your
-`deps.edn`. For this project it will print:
+`deps.edn`. It will always pick the newest version that is available in your .m2
+repo.
+
+For this project it will print:
 
 ``` clojure
 babashka/fs {:mvn/version "0.0.1"}
