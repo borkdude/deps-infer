@@ -40,9 +40,17 @@
                   entries)))
       index)))
 
-(defn newest [versions]
+(defn newest [versions snapshots]
   (reduce (fn [acc v]
-            (if (v/newer? v acc) v acc))
+            (let [parsed (v/parse v)
+                  snapshot? (:snapshot? parsed)]
+              (if snapshot?
+                (if snapshots
+                  (if (v/newer? v acc)
+                    v acc)
+                  acc)
+                (if (v/newer? v acc)
+                  v acc))))
           versions))
 
 (defn select-deps [source-lang deps]
@@ -64,6 +72,8 @@
    ;; A non-idempotent option (:default is applied first)
    [nil "--analyze SOURCES" "The source file(s) to analyze"
     :default "src:test"]
+   [nil "--snapshots" "Suggest snapshots"
+    :default false]
    ["-h" "--help"]])
 
 (defn -main [& args]
@@ -93,7 +103,8 @@
                                      (println "WARNING: no dep found for" n))
                                    acc))) {} used-namespaces)
             results (reduce (fn [acc [k v]]
-                              (assoc acc k {:mvn/version (newest (:mvn/versions v))}))
+                              (assoc acc k {:mvn/version (newest (:mvn/versions v)
+                                                                 (:snapshots opts))}))
                             (sorted-map)
                             deps-map)]
         (doseq [[k v] results]

@@ -35,7 +35,7 @@ For this project it will print:
 
 ``` clojure
 babashka/fs {:mvn/version "0.0.1"}
-clj-kondo/clj-kondo {:mvn/version "2021.02.14-SNAPSHOT"}
+clj-kondo/clj-kondo {:mvn/version "2021.02.13"}
 org.clojure/clojure {:mvn/version "1.10.3-rc1"}
 org.clojure/tools.cli {:mvn/version "1.0.194"}
 version-clj/version-clj {:mvn/version "2.0.1"}
@@ -56,10 +56,11 @@ WARNING: no dep found for foo.bar
 
 ## CLI options
 
-- `--repo`: The location of the mvn repo
+- `--repo`: The location of the mvn repo.
 - `--analyze`: The file, directory or directories of sources to analyze. You can
 combine multiple files and directories using the OS-specific path separator:
-`src:test`
+`src:test`.
+- `--snapshots`: Suggest `SNAPSHOT` versions.
 
 ## Possible improvements
 
