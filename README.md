@@ -10,6 +10,7 @@ Proof of concept, subject to change. Improvements welcome!
 
 This tool can be used for e.g.:
 
+- Porting a `lein` `project.clj` to `deps.edn`
 - Porting scripts (e.g. [babashka](https://github.com/babashka/babashka)
 scripts) to a `deps.edn` project.
 - Migrating from git deps to mvn deps
