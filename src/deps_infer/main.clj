@@ -21,7 +21,8 @@
         (let [entries (enumeration-seq (.entries jar-resource))]
           (reduce (fn [acc e]
                     (let [raw-name (.getName e)]
-                      (if (re-find suffix-re raw-name)
+                      (if (and (not (str/starts-with? raw-name "META"))
+                               (re-find suffix-re raw-name))
                         (let [n (str/replace raw-name suffix-re "")
                               n (str/replace n "_" "-")
                               n (str/replace n "/" ".")
