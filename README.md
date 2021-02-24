@@ -30,14 +30,19 @@ org.clojure/tools.cli {:mvn/version "1.0.194"}
 version-clj/version-clj {:mvn/version "2.0.1"}
 ```
 
-The ClojureScript dependency is a false positive because it matched on some of
-the namespace we use in this project. This can be improved.
-
 ## CLI options
 
 - `--repo`: The location of the mvn repo
 - `--sources`: The directory or directories of sources to analyze. You can
 combine multiple directories using the OS-specific path separator: `src:test`
+
+## Areas of improvement
+
+PRs welcome.
+
+- [ ] The ClojureScript dependency is a false positive because it matched on some of
+the namespace we use in this project.
+- [ ] Download an index of all of Clojars for better inferencing
 
 ## Troubleshooting
 
