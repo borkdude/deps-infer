@@ -18,7 +18,7 @@ and `test`. The source path is configurable using the `--sources` argument.
 After that it will suggest a list of dependencies that you can add to your
 `deps.edn`. For this project it will print:
 
-```
+``` clojure
 babashka/fs {:mvn/version "0.0.1"}
 clj-kondo/clj-kondo {:mvn/version "2021.02.14-SNAPSHOT"}
 org.clojure/clojure {:mvn/version "1.10.3-rc1"}
