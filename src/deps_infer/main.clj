@@ -95,14 +95,16 @@
       (let [index (edn/read-string (slurp index-file))
             analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
                                                  :config {:output {:analysis true}}}))
+            defined-namespaces (set (map :name (:namespace-definitions analysis)))
             used-namespaces (distinct (map (juxt :to (comp lang :filename)) (:namespace-usages analysis)))
             deps-map (reduce (fn [acc [n lang]]
                                (if-let [deps-map (get index n)]
                                  (let [deps-map (select-deps lang deps-map)]
                                    (merge acc deps-map))
                                  (do
-                                   (binding [*out* *err*]
-                                     (println "WARNING: no dep found for" n))
+                                   (when-not (contains? defined-namespaces n)
+                                     (binding [*out* *err*]
+                                       (println "WARNING: no dep found for" n)))
                                    acc))) {} used-namespaces)
             results (reduce (fn [acc [k v]]
                               (assoc acc k {:mvn/version (newest (:mvn/versions v)
