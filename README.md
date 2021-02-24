@@ -8,9 +8,12 @@ Proof of concept, subject to change. Improvements welcome!
 
 ## Use cases
 
-This tool can be useful when you want to port scripts
-(e.g. [babashka](https://github.com/babashka/babashka) scripts) to a `deps.edn`
-project.
+This tool can be used for e.g.:
+
+- Porting scripts (e.g. [babashka](https://github.com/babashka/babashka)
+scripts) to a `deps.edn` project.
+- Migrating from git deps to mvn deps
+- Checking if there is a newer version available
 
 ## Run
 
