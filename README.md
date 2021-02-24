@@ -59,6 +59,7 @@ some of the namespace we use in this project.
 - [ ] Download an index of all of Clojars for inferencing of deps that are not
       in your local `.m2/repository`. This index must be kept up to date,
       e.g. daily, and be committed to some git repo where we can then fetch it.
+- [ ] Add warnings for unresolved namespaces
 
 ## Troubleshooting
 
