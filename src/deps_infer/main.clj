@@ -44,7 +44,7 @@
   [["-r" "--repo M2_PATH" "The m2 repo to index. Defaults to ~/.m2."
     :default (str (io/file (System/getProperty "user.home") ".m2"))]
    ;; A non-idempotent option (:default is applied first)
-   ["-s" "--sources SOURCES" "The sources to analyze"
+   [nil "--analyze SOURCES" "The source file(s) to analyze"
     :default "src:test"]
    ["-h" "--help"]])
 
@@ -63,7 +63,7 @@
               index-str (with-out-str (pp/pprint index))]
           (spit index-file index-str)))
       (let [index (edn/read-string (slurp index-file))
-            analysis (:analysis (clj-kondo/run! {:lint [(:sources opts)]
+            analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
                                                  :config {:output {:analysis true}}}))
             used-namespaces (map :to (:namespace-usages analysis))
             deps-maps (vals (select-keys index used-namespaces))
