@@ -48,7 +48,7 @@ PRs welcome.
 
 - [ ] The ClojureScript dependency is a false positive because it matched on some of
 the namespace we use in this project.
-- [ ] Download an index of all of Clojars for better inferencing
+- [ ] Download an index of all of Clojars for inferencing deps that are not in your local `.m2/repository`.
 
 ## Troubleshooting
 
