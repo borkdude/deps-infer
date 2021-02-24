@@ -37,7 +37,6 @@ For this project it will print:
 babashka/fs {:mvn/version "0.0.1"}
 clj-kondo/clj-kondo {:mvn/version "2021.02.14-SNAPSHOT"}
 org.clojure/clojure {:mvn/version "1.10.3-rc1"}
-org.clojure/clojurescript {:mvn/version "1.10.773"}
 org.clojure/tools.cli {:mvn/version "1.0.194"}
 version-clj/version-clj {:mvn/version "2.0.1"}
 ```
