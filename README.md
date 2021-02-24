@@ -45,8 +45,7 @@ and then run this tool again.
 
 ## Credits
 
-[Alex Miller](https://github.com/puredanger) and
-[hiredman](https://gist.github.com/hiredman/15186e238dc365fd72e2e09c3eb7561a)
+- [hiredman](https://gist.github.com/hiredman/15186e238dc365fd72e2e09c3eb7561a)
 for coming up with the idea.
 
 ## License
