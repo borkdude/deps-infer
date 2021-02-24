@@ -6,6 +6,12 @@ Infer mvn deps from sources.
 
 Proof of concept, subject to change. Improvements welcome!
 
+## Use cases
+
+This tool can be useful when you want to port scripts
+(e.g. [babashka](https://github.com/babashka/babashka) scripts) to a `deps.edn`
+project.
+
 ## Run
 
 ``` clojure
