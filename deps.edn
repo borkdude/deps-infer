@@ -1,4 +1,4 @@
 {:deps {babashka/fs {:mvn/version "0.0.1"}
         org.clojure/tools.cli {:mvn/version "1.0.194"}
-        clj-kondo/clj-kondo {:mvn/version "2021.02.13"}
+        clj-kondo/clj-kondo {:mvn/version "2021.03.03"}
         version-clj/version-clj {:mvn/version "2.0.1"}}}
