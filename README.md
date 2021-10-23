@@ -21,7 +21,7 @@ scripts) to a `deps.edn` project.
 ## Run
 
 ``` clojure
-$ clojure -M deps-infer.main
+$ clojure -M -m deps-infer.main
 ```
 
 This will index your `.m2/repository` and will analyze your sources under `src`
