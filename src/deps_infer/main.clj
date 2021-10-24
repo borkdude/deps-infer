@@ -4,11 +4,21 @@
             [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.pprint :as pp]
+            [clojure.string :as str]
             [clojure.tools.cli :as cli]
             [deps-infer.clojars :refer [index-jar lang]]
             [version-clj.core :as v]))
 
 (def suffix-re #"\.clj$|\.cljs$|\.cljc$") ;; Not including __init\.class$ as this gives false positives!
+
+(defn path->org
+  [path]
+  (let [path-str (str path)]
+    (if (re-find #"[/](?=.*[/])" path-str)
+      (-> path-str
+        (str/replace #"[/](?=.*[/])" ".")
+        symbol)
+      path)))
 
 (defn newest [versions snapshots]
   (reduce (fn [acc v]
@@ -80,3 +90,4 @@
                             grouped)]
         (doseq [[k v] results]
           (prn k v))))))
+          (prn (path->org k) v))))))
