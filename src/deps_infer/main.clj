@@ -47,6 +47,7 @@
    ;; A non-idempotent option (:default is applied first)
    [nil "--analyze SOURCES" "The source file(s) to analyze"
     :default "src:test"]
+   [nil "--cache-dir CACHE_PATH" "The cache dir for the index. Defaults to .deps-infer/ on the `--repo` directory."]
    [nil "--snapshots" "Suggest snapshots"
     :default false]
    ["-h" "--help"]])
@@ -55,38 +56,43 @@
   (binding [*print-namespace-maps* false]
     (let [parsed (cli/parse-opts args cli-options)
           opts (:options parsed)
-          index-file (fs/file ".work" "index.edn")]
-      (when (not (fs/exists? index-file))
-        (binding [*out* *err*]
-          (println "Indexing" (:repo opts)))
-        (io/make-parents index-file)
-        (let [all-jars (fs/glob (:repo opts) "**.jar")
-              index (reduce index-jar {} all-jars)
-              index (into (sorted-map) index)
-              index-str (with-out-str (pp/pprint index))]
-          (spit index-file index-str)))
-      (let [index (edn/read-string (slurp index-file))
-            analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
-                                                 :config {:output {:analysis true}}}))
-            defined-namespaces (set (map :name (:namespace-definitions analysis)))
-            used-namespaces (distinct (map (juxt :to (comp lang :filename))
-                                           (:namespace-usages analysis)))
-            entries (reduce (fn [acc [n lang]]
-                              (if-let [dep-entries (get index n)]
-                                (let [dep-entries (select-deps lang dep-entries)]
-                                  (into acc dep-entries))
-                                (do
-                                  (when-not (contains? defined-namespaces n)
-                                    (binding [*out* *err*]
-                                      (println "WARNING: no dep found for" n)))
-                                  acc)))
-                            [] used-namespaces)
-            grouped (group-by (juxt :group-id :artifact) entries)
-            results (reduce (fn [acc [k v]]
-                              (assoc acc (symbol (first k) (second k))
-                                     {:mvn/version (newest (map :mvn/version v)
-                                                           (:snapshots opts))}))
-                            (sorted-map)
-                            grouped)]
-        (doseq [[k v] results]
-          (prn (path->org k) v))))))
+          index-file (if (:cache-dir opts)
+                       (fs/file (:cache-dir opts) "index.edn")
+                       (fs/file (:repo opts) ".deps-infer" "index.edn"))]
+      (if (:help opts)
+        (println (:summary parsed))
+        (do
+          (when (not (fs/exists? index-file))
+            (binding [*out* *err*]
+              (println "Indexing" (:repo opts)))
+            (io/make-parents index-file)
+            (let [all-jars (fs/glob (:repo opts) "**.jar")
+                  index (reduce index-jar {} all-jars)
+                  index (into (sorted-map) index)
+                  index-str (with-out-str (pp/pprint index))]
+              (spit index-file index-str)))
+          (let [index (edn/read-string (slurp index-file))
+                analysis (:analysis (clj-kondo/run! {:lint [(:analyze opts)]
+                                                     :config {:output {:analysis true}}}))
+                defined-namespaces (set (map :name (:namespace-definitions analysis)))
+                used-namespaces (distinct (map (juxt :to (comp lang :filename))
+                                            (:namespace-usages analysis)))
+                entries (reduce (fn [acc [n lang]]
+                                  (if-let [dep-entries (get index n)]
+                                    (let [dep-entries (select-deps lang dep-entries)]
+                                      (into acc dep-entries))
+                                    (do
+                                      (when-not (contains? defined-namespaces n)
+                                        (binding [*out* *err*]
+                                          (println "WARNING: no dep found for" n)))
+                                      acc)))
+                          [] used-namespaces)
+                grouped (group-by (juxt :group-id :artifact) entries)
+                results (reduce (fn [acc [k v]]
+                                  (assoc acc (symbol (first k) (second k))
+                                    {:mvn/version (newest (map :mvn/version v)
+                                                    (:snapshots opts))}))
+                          (sorted-map)
+                          grouped)]
+            (doseq [[k v] results]
+              (prn (path->org k) v))))))))

@@ -27,6 +27,9 @@ $ clojure -M -m deps-infer.main
 This will index your `.m2/repository` and will analyze your sources under `src`
 and `test`.
 
+By default it will write the analysis output on a `.deps-infer/` inside the `--repo`
+directory. You can change the location using the `--cache-dir` option.
+
 After that it will suggest a list of dependencies that you can add to your
 `deps.edn`. It will always pick the newest version that is available in your .m2
 repo.
