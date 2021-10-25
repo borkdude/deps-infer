@@ -55,7 +55,7 @@
   (binding [*print-namespace-maps* false]
     (let [parsed (cli/parse-opts args cli-options)
           opts (:options parsed)
-          index-file (fs/file ".work" "index.edn")]
+          index-file (fs/file (:repo opts) ".work" "index.edn")]
       (when (not (fs/exists? index-file))
         (binding [*out* *err*]
           (println "Indexing" (:repo opts)))
