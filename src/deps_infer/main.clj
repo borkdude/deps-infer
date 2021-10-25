@@ -89,5 +89,4 @@
                             (sorted-map)
                             grouped)]
         (doseq [[k v] results]
-          (prn k v))))))
           (prn (path->org k) v))))))
