@@ -47,7 +47,7 @@
    ;; A non-idempotent option (:default is applied first)
    [nil "--analyze SOURCES" "The source file(s) to analyze"
     :default "src:test"]
-   [nil "--cache-dir CACHE_PATH" "The cache dir for the index. Defaults to $M2_PATH/.deps-infer."]
+   [nil "--cache-dir CACHE_PATH" "The cache dir for the index. Defaults to .deps-infer/ on the `--repo` directory."]
    [nil "--snapshots" "Suggest snapshots"
     :default false]
    ["-h" "--help"]])
