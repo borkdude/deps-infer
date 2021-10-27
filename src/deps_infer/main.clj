@@ -79,7 +79,13 @@
                                             (:namespace-usages analysis)))
                 entries (reduce (fn [acc [n lang]]
                                   (if-let [dep-entries (get index n)]
-                                    (let [dep-entries (select-deps lang dep-entries)]
+                                    (let [dep-entries (select-deps lang dep-entries)
+                                          artifacts (distinct (map (juxt :group-id :artifact) dep-entries))]
+                                      (when (> (count artifacts) 1)
+                                        (binding [*out* *err*]
+                                          (println "WARNING:" n "has multiple providers:")
+                                          (doseq [[g a] artifacts]
+                                            (println "*" (str (str/replace g #"[/]" ".") "/" a)))))
                                       (into acc dep-entries))
                                     (do
                                       (when-not (contains? defined-namespaces n)
